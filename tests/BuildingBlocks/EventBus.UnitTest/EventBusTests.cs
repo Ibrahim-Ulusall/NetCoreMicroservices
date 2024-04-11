@@ -26,21 +26,35 @@ namespace EventBus.UnitTest
 
             services.AddSingleton<IEventBus>(sp =>
             {
-                EventBusConfig config = new()
-                {
-                    ConnectionReTryCount = 5,
-                    EventBusType = Base.Enums.EventBusType.RabbitMQ,
-                    DefaultTopicName = "NetCoreMicroservices.Test",
-                    SubscriberClientAppName = "EventBus.UnitTest",
-                    EventNameSuffix = "IntegrationEvent"
-                };
-
-                return EventBusFactory.Create(config, sp);
+                return EventBusFactory.Create(GetRabbitMqConfiguration(), sp);
             });
             var serviceProvider = services.BuildServiceProvider();
             var eventBus = serviceProvider.GetService<IEventBus>();
             eventBus.Subscribe<OrderCreatedIntegrationEvent, OrderCreatedIntegrationEventHandler>();
+            eventBus.UnSubscribe<OrderCreatedIntegrationEvent, OrderCreatedIntegrationEventHandler>();
 
-        }   
+        }
+        [TestMethod]
+        public void SendMessageRabbitMQTest()
+        {
+            services.AddSingleton<IEventBus>(sp =>
+            {
+                return EventBusFactory.Create(GetRabbitMqConfiguration(), sp);
+            });
+            var serviceProvider = services.BuildServiceProvider();
+            var eventBus = serviceProvider.GetService<IEventBus>();
+            eventBus.Publish(new OrderCreatedIntegrationEvent(1));
+        }
+        private EventBusConfig GetRabbitMqConfiguration()
+        {
+            return new EventBusConfig
+            {
+                ConnectionReTryCount = 5,
+                EventBusType = Base.Enums.EventBusType.RabbitMQ,
+                DefaultTopicName = "NetCoreMicroservices.Test",
+                SubscriberClientAppName = "EventBus.UnitTest",
+                EventNameSuffix = "IntegrationEvent"
+            };
+        }
     }
 }

@@ -6,6 +6,7 @@ public class OrderCreatedIntegrationEventHandler : IIntegrationEventHandler<Orde
 {
     public Task Handle(OrderCreatedIntegrationEvent @event)
     {
+        Console.WriteLine("Worked" + @event.Id);
         return Task.CompletedTask;
     }
 }
