@@ -1,0 +1,6 @@
+@ICatalogService.Api_HostAddress = http://localhost:5188
+
+GET {{ICatalogService.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
