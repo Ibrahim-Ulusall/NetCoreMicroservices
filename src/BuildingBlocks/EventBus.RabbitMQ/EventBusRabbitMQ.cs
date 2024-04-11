@@ -26,7 +26,7 @@ public class EventBusRabbitMQ : BaseEventBus
         else
             _connectionFactory = new ConnectionFactory();
         _rabbitMQPersistentConnection = new RabbitMQPersistentConnection(_connectionFactory,
-            EventBusConfig.ConnectionReTryCount, serviceProvider);
+            serviceProvider,EventBusConfig.ConnectionReTryCount);
         _consumerChannel = CreateConsumerChannel();
         _logger = serviceProvider.GetService(typeof(ILogger<EventBusRabbitMQ>)) as ILogger<EventBusRabbitMQ>;
         _eventBusSubscriptionManager.OnEventRemoved += EventBusSubscriptionManagerOnEventRemoved;

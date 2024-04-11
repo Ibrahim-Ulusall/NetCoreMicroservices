@@ -15,12 +15,13 @@ public class RabbitMQPersistentConnection : IDisposable
     private bool _disposed;
     private object lockObject = new object();
     public bool IsConnected => _connection != null && _connection.IsOpen;
-    public RabbitMQPersistentConnection(IConnectionFactory connectionFactory, int retryCount = 5, IServiceProvider serviceProvider)
+    public RabbitMQPersistentConnection(IConnectionFactory connectionFactory, IServiceProvider serviceProvider,int retryCount = 5)
     {
-        _logger = _serviceProvider.GetService(typeof(ILogger<RabbitMQPersistentConnection>)) as ILogger<RabbitMQPersistentConnection>;
+        
         _connectionFactory = connectionFactory;
         _serviceProvider = serviceProvider;
         _retryCount = retryCount;
+        _logger = _serviceProvider.GetService(typeof(ILogger<RabbitMQPersistentConnection>)) as ILogger<RabbitMQPersistentConnection>;
     }
 
     public IModel CreateModel() => _connection.CreateModel();
